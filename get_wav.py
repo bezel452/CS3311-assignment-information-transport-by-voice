@@ -2,11 +2,13 @@ import pyaudio
 import wave 
 from tqdm import tqdm
 
+## 录制音频，但需要指定时长
+
 def record_audio(out_path, record_second):
     CHUNK = 1024
     FORMAT = pyaudio.paInt16
     CHANNELS = 1
-    RATE = 15000
+    RATE = 44100
     p = pyaudio.PyAudio()
     stream = p.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK)
 
@@ -26,4 +28,4 @@ def record_audio(out_path, record_second):
     p.terminate()
     wf.close()
 
-record_audio("test_trans1.wav", 25)
+record_audio("test_new2.wav", 9)
