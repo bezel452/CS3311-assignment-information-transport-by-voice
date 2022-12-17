@@ -7,6 +7,8 @@ from matplotlib.mlab import window_none
 import librosa
 import scipy.io
 
+## 配套使用，将图片变为音频
+
 def img2wav(img_path, wav_path, fft_size = 1024):
     img = Image.open(img_path).convert('L')
 
@@ -42,7 +44,7 @@ def change_freq(wav_path, output_path, size):
     data = data.astype('short')
     scipy.io.wavfile.write(output_path, sr, data)
 '''
-def draw_figure(wav_path, fft_size=1024):
+def draw_figure(wav_path, output_path, fft_size=1024):
     with wave.open(wav_path, 'rb') as f:
         n_samples = f.getnframes()
         data = f.readframes(n_samples)
@@ -54,8 +56,13 @@ def draw_figure(wav_path, fft_size=1024):
     data = data.T[0]
 
     plt.specgram(data / 32767, fft_size, sample_rate, window=window_none, noverlap=0, scale='dB')
+    plt.axis('off')
+    plt.savefig(output_path, dpi = 300)
+    img = Image.open(output_path).convert('L')
+    img.save(output_path)
     plt.show()
 
-# img2wav("test_img.png", "test_img3_3.wav")
-# change_freq("test_img3.wav", "test_img3_1.wav", -5)
-draw_figure("test_re1.wav")
+if __name__ == '__main__':
+    # img2wav("test_img.png", "test_img_new.wav")
+    # change_freq("test_img3.wav", "test_img3_1.wav", -5)
+    draw_figure("test_redu.wav", "11.png")
