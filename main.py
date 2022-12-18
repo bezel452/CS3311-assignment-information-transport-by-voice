@@ -6,6 +6,7 @@ import test_noise
 import generate_wav
 import recall_wav
 
+## Main function
 
 flag = input('Who are you?(0: Sender / 1: Receiver / 2: Simulation / 3: Other function): ')
 
