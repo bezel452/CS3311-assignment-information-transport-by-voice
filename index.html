@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js" type="application/javascript"></script>
+    <title>TEST-WEB</title>
+    <style>
+        #a1 {
+            display: none;
+        }
+        #a2{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div>img2wav</div>
+    <input type="file" id="file-uploader" accept=".png"/>
+    <input type="submit" value="Upload" id="btn-upload"/>
+    <a href="" download="" id="a1">保存到本地</a>
+    <div id="img1"></div>  <br>
+    
+
+    <div>wav2img</div>
+    <input type="file" id="wav-uploader" accept=".wav"/>
+    <input type="submit" value="Upload" id="btn-wav"/>
+    <a href="" download="" id="a2">保存到本地</a>
+    <img src="" alt="" id="img2" width="500">
+
+    <script>
+        const reader = new FileReader();
+        const fileUploader = document.getElementById("file-uploader");
+        const wavuploader = document.getElementById("wav-uploader")
+        const btnw = document.getElementById("btn-wav")
+        const btn = document.getElementById("btn-upload");
+        const cur1 = document.getElementById("img1");
+        const cur2 = document.getElementById("img2");
+        const a1 = document.getElementById("a1")
+        const a2 = document.getElementById("a2")
+        fileUploader.addEventListener('change', event=> {
+            const files = event.target.files;
+            const file = files[0];
+            reader.readAsDataURL(file);
+
+            reader.addEventListener('load', (event) => {
+                const img = document.createElement('img');
+                cur1.appendChild(img);
+                img.src = event.target.result;
+                img.alt = file.name;
+            });
+            btn.onclick = function(){
+                const xhr = new XMLHttpRequest()
+                const fd = new FormData()
+                fd.append('file', file);
+                xhr.open('POST', 'http://127.0.0.1:8000/files')
+                xhr.send(fd)
+                xhr.onreadystatechange = function(){
+                    if(xhr.readyState == 4){
+                        if(xhr.status >= 200 && xhr.status < 300){         
+                            var data = xhr.response
+                            a1.style.display = 'inline-block';
+                            var arr = data.split('"')
+                            data = arr.join('')
+                            var url = "web/" + data
+                            a1.href = url
+                            a1.download = data + ".wav"
+                        }
+                    }
+                }
+            }
+        })
+        wavuploader.addEventListener('change', event => {
+            const files = event.target.files;
+            const file = files[0]
+            btnw.onclick = function(){
+                const xhr = new XMLHttpRequest()
+                const fd = new FormData()
+                fd.append('file', file);
+                xhr.open('POST', 'http://127.0.0.1:8000/recover')
+                xhr.send(fd)
+                xhr.onreadystatechange = function(){
+                    if(xhr.readyState == 4){
+                        if(xhr.status >= 200 && xhr.status < 300){         
+                            var data = xhr.response
+                            a2.style.display = 'inline-block';
+                            var arr = data.split('"')
+                            data = arr.join('')
+                            var url2 = "web/" + data;
+                            a2.href = url2;
+                            a2.download = data + '.png';
+                            cur2.src = url2;
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>
