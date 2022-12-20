@@ -4,4 +4,5 @@ Add watermarking into speech using LSB-based algorithm(in test). Actually use a 
 
 The class project of CS3311 Computer Network.
 
-Update the extra function out of the project in class
+2022.12.20
+- Update the extra function out of the project in class
